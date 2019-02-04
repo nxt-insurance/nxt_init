@@ -1,8 +1,7 @@
 # Attrinit
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/attrinit`. To experiment with that code, run `bin/console` for an interactive prompt.
-
-TODO: Delete this and the text above, and describe your gem
+Create an initializer that accepts option arguments and define private readers for your 
+arguments at the same time. 
 
 ## Installation
 
@@ -22,7 +21,37 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+class MyService
+    include Attrinit
+    attr_initializer :one, 
+             two: 'has a default', 
+             three: nil, # makes the attribute optional
+             four: -> { "This is set on initialize: #{Time.now}" } 
+             
+    def call
+      {
+        one: one,
+        two: two,
+        three: three,
+        four: four
+      }
+    end
+end
+
+my_service = MyService.new(one: 'this is required')
+my_service.call
+
+# Will output the following:
+{
+  :one=>"this is required", 
+  :two=>"has a default", 
+  :three=>nil, 
+  :four=>"This is set on initialize: 2019-02-04 18:10:56 +0100"
+} 
+```
+
+The attribute reader are made private. If you need public accessors you have to add them yourself.
 
 ## Development
 
