@@ -1,12 +1,12 @@
-RSpec.describe Attrinit do
+RSpec.describe AttrInit do
   it "has a version number" do
-    expect(Attrinit::VERSION).not_to be nil
+    expect(AttrInit::VERSION).not_to be nil
   end
 
   let(:test_class) do
     Class.new do
-      include Attrinit
-      attr_initializer :plain, with_default_value: 'default', with_default_block: -> { default_block }
+      include AttrInit
+      attr_init :plain, with_default_value: 'default', with_default_block: -> { default_block }
 
       private
 
@@ -16,14 +16,14 @@ RSpec.describe Attrinit do
     end
   end
 
-  describe 'attr_initializer' do
+  describe 'attr_init' do
     context 'when called multiple times' do
       let(:test_class) do
         Class.new do
-          include Attrinit
-          attr_initializer :plain, with_default_value: 'default', with_default_block: -> { default_block }
-          attr_initializer :plain, with_default_value: 'new default', with_default_block: -> { 'other default block' }
-          attr_initializer :additional
+          include AttrInit
+          attr_init :plain, with_default_value: 'default', with_default_block: -> { default_block }
+          attr_init :plain, with_default_value: 'new default', with_default_block: -> { 'other default block' }
+          attr_init :additional
 
           private
 
@@ -62,7 +62,7 @@ RSpec.describe Attrinit do
     end
 
     describe 'inheritance' do
-      context 'when the parent class does not implement attr_initializer' do
+      context 'when the parent class does not implement attr_init' do
         let(:parent_class) do
           Class.new do
             def initialize(name, company: 'getsafe')
@@ -76,8 +76,8 @@ RSpec.describe Attrinit do
 
         let(:test_class) do
           Class.new(parent_class) do
-            include Attrinit
-            attr_initializer :plain,
+            include AttrInit
+            attr_init :plain,
                              with_default_value: 'default',
                              with_default_block: -> { 'default block' }
 
@@ -86,7 +86,7 @@ RSpec.describe Attrinit do
 
         subject { test_class.new('Andy', company: 'Getsafe', plain: 'plain') }
 
-        it 'passes through arguments and non attr_initializer options' do
+        it 'passes through arguments and non attr_init options' do
           expect(subject.send :plain).to eq('plain')
           expect(subject.send :with_default_value).to eq('default')
           expect(subject.send :with_default_block).to eq('default block')
@@ -95,22 +95,22 @@ RSpec.describe Attrinit do
         end
       end
 
-      context 'when the parent class implements attr_initializer' do
-        let(:attr_initializer_inherited) do
+      context 'when the parent class implements attr_init' do
+        let(:attr_init_inherited) do
           Class.new(test_class) do
-            attr_initializer :subclass
+            attr_init :subclass
           end
         end
 
-        subject { attr_initializer_inherited.new(plain: 'inherited', subclass: 'only I can see') }
+        subject { attr_init_inherited.new(plain: 'inherited', subclass: 'only I can see') }
 
-        it 'copies the attr_initializer options from the parent class' do
+        it 'copies the attr_init options from the parent class' do
           expect(subject.send(:plain)).to eq('inherited')
           expect(subject.send(:subclass)).to eq('only I can see')
         end
 
-        it 'does not influence the attr_initializer_opts of the parent class' do
-          expect { attr_initializer_inherited }.not_to change { test_class.attr_initializer_opts}
+        it 'does not influence the attr_init_opts of the parent class' do
+          expect { attr_init_inherited }.not_to change { test_class.attr_init_opts}
         end
       end
     end

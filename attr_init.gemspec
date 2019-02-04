@@ -1,15 +1,15 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "attrinit/version"
+require "attr_init/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "attrinit"
-  spec.version       = Attrinit::VERSION
+  spec.name          = "attr_init"
+  spec.version       = AttrInit::VERSION
   spec.authors       = ["Andreas Robecke"]
   spec.email         = ["a.robecke@getsafe.de"]
 
-  spec.summary       = %q{attrinit allows you to define an initializers that takes options and defines private readers for those options at the same time}
+  spec.summary       = %q{attr_init allows you to define an initializers that takes options and defines private readers for those options at the same time}
   spec.homepage      = "https://github.com/nxt-insurance"
   spec.license       = "MIT"
 
@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
     spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
 
     spec.metadata["homepage_uri"] = spec.homepage
-    spec.metadata["source_code_uri"] = "https://github.com/nxt-insurance/attrinit"
+    spec.metadata["source_code_uri"] = "https://github.com/nxt-insurance/attr_init"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."

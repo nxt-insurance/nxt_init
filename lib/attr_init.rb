@@ -1,23 +1,23 @@
-require "attrinit/version"
+require "attr_init/version"
 require 'active_support'
 
-module Attrinit
+module AttrInit
   InvalidOptionError = Class.new(ArgumentError)
 
   module ClassMethods
-    def attr_initializer(*args)
+    def attr_init(*args)
       flat_args = flatten_options(*args)
-      self.attr_initializer_opts ||= []
-      self.attr_initializer_opts += flat_args
+      self.attr_init_opts ||= []
+      self.attr_init_opts += flat_args
       define_private_readers(*flat_args)
     end
 
-    attr_accessor :attr_initializer_opts
+    attr_accessor :attr_init_opts
 
     private
 
     def inherited(subclass)
-      subclass.attr_initializer_opts = attr_initializer_opts.map(&:dup)
+      subclass.attr_init_opts = attr_init_opts.map(&:dup)
     end
 
     def define_private_readers(*args)
@@ -35,21 +35,21 @@ module Attrinit
 
   module InstanceMethods
     def initialize(*args, **attrs)
-      option_keys = self.class.send(:attr_initializer_opts).map do |option|
+      option_keys = self.class.send(:attr_init_opts).map do |option|
         option.is_a?(Hash) ? option.keys.first : option
       end
 
-      attr_initializer_opts = attrs.slice(*option_keys)
+      attr_init_opts = attrs.slice(*option_keys)
       other_options = attrs.slice!(*option_keys)
       # passing **{} is like calling super({}) which does not work when super does not except arguments
       other_options.empty? ? super(*args) : super(*args, **other_options)
-      initialize_attrs_from_options(**attr_initializer_opts)
+      initialize_attrs_from_options(**attr_init_opts)
     end
 
     private
 
     def initialize_attrs_from_options(**attrs)
-      self.class.send(:attr_initializer_opts).each do |opt|
+      self.class.send(:attr_init_opts).each do |opt|
         if opt.is_a?(Hash)
           key = opt.keys.first
           value = opt.values.first
