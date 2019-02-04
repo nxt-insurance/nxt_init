@@ -9,14 +9,14 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Andreas Robecke"]
   spec.email         = ["a.robecke@getsafe.de"]
 
-  spec.summary       = %q{attr_init allows you to define an initializers that takes options and defines private readers for those options at the same time}
+  spec.summary       = %q{attr_init allows you to define an initializers that takes option arguments and defines private readers for those on the fly}
   spec.homepage      = "https://github.com/nxt-insurance"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    spec.metadata["allowed_push_host"] = "TODO: Set to 'http://mygemserver.com'"
+    spec.metadata["allowed_push_host"] = 'http://rubygems.com'
 
     spec.metadata["homepage_uri"] = spec.homepage
     spec.metadata["source_code_uri"] = "https://github.com/nxt-insurance/attr_init"

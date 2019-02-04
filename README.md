@@ -27,7 +27,7 @@ class MyService
     attr_init :one, 
              two: 'has a default', 
              three: nil, # makes the attribute optional
-             four: -> { "This is set on initialize: #{Time.now}" } 
+             four: -> { "This is set on initialize: #{Time.now} - means it will not be evaluated multiple times" } 
              
     def call
       {
@@ -47,11 +47,12 @@ my_service.call
   one: "this is required", 
   two: "has a default", 
   three: nil, 
-  four: "This is evaluated on initialize: 2019-02-04 18:10:56 +0100"
+  four: "This is evaluated on initialize: 2019-02-04 18:10:56 +0100 - means it will not be evaluated multiple times"
 } 
 ```
 
-The attribute reader are made private. If you need public accessors you have to add them yourself. That's all there is. 
+The attribute reader are made private. If you need public accessors you have to add them yourself. That's all there is.
+Check out the specs for examples how we handle inheritance. 
 
 ## Development
 
