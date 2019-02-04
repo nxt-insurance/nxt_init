@@ -51,7 +51,7 @@ my_service.call
 } 
 ```
 
-The attribute reader are made private. If you need public accessors you have to add them yourself. That's all there is.
+The attribute readers are private. If you need public accessors you have to add them yourself. That's all there is.
 Check out the specs for examples how we handle inheritance. 
 
 ## Development
