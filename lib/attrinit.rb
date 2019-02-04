@@ -53,7 +53,7 @@ module Attrinit
         if opt.is_a?(Hash)
           key = opt.keys.first
           value = opt.values.first
-          value = attrs[key] || value.respond_to?(:call) ? instance_exec(&value) : value
+          value = attrs[key] || (value.respond_to?(:call) ? instance_exec(&value) : value)
         elsif opt.is_a?(Symbol)
           key = opt
           value = attrs.fetch(opt)
