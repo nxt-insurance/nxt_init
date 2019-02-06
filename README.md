@@ -17,7 +17,7 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install attrinit
+    $ gem install nxt_init
 
 ## Usage
 
