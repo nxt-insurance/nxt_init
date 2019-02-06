@@ -6,7 +6,7 @@ require "nxt_init/version"
 Gem::Specification.new do |spec|
   spec.name          = "nxt_init"
   spec.version       = NxtInit::VERSION
-  spec.authors       = ["Andreas Robecke"]
+  spec.authors       = ["Andreas Robecke", "Nils Sommer", "Raphael Kallensee"]
   spec.email         = ["a.robecke@getsafe.de"]
 
   spec.summary       = %q{nxt_init allows you to define an initializer that takes option arguments and defines private readers for those on the fly}
