@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    attr_init (0.1.0)
+    attrinit (0.1.0)
       activesupport
 
 GEM
@@ -44,7 +44,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  attr_init!
+  attrinit!
   bundler (~> 1.17)
   pry
   rake (~> 10.0)

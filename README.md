@@ -1,4 +1,4 @@
-# AttrInit
+# Attrinit
 
 Create an initializer that accepts option arguments and define private readers for your 
 arguments at the same time. 
@@ -8,7 +8,7 @@ arguments at the same time.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'attr_init'
+gem 'attrinit'
 ```
 
 And then execute:
@@ -17,14 +17,14 @@ And then execute:
 
 Or install it yourself as:
 
-    $ gem install attr_init
+    $ gem install attrinit
 
 ## Usage
 
 ```ruby
 class MyService
-    include AttrInit
-    attr_init :one, 
+    include Attrinit
+    attr_initializer :one, 
              two: 'has a default', 
              three: nil, # makes the attribute optional
              four: -> { "This is set on initialize: #{Time.now} - means it will not be evaluated multiple times" } 
@@ -44,6 +44,7 @@ my_service.call
 
 # Will output the following:
 {
+
   one: "this is required", 
   two: "has a default", 
   three: nil, 
@@ -62,7 +63,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/[USERNAME]/attr_init.
+Bug reports and pull requests are welcome on GitHub at https://github.com/nxt-insurance/attrinit.
 
 ## License
 
