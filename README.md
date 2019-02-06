@@ -24,7 +24,7 @@ Or install it yourself as:
 ```ruby
 class MyService
     include Attrinit
-    attr_initializer :one, 
+    attr_init :one, 
              two: 'has a default', 
              three: nil, # makes the attribute optional
              four: -> { "This is set on initialize: #{Time.now} - means it will not be evaluated multiple times" } 
