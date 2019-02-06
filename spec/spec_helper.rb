@@ -1,5 +1,5 @@
 require "bundler/setup"
-require "attrinit"
+require "nxt_init"
 require "pry"
 
 RSpec.configure do |config|

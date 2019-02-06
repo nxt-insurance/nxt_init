@@ -1,4 +1,4 @@
-# Attrinit
+# NxtInit
 
 Create an initializer that accepts option arguments and define private readers for your 
 arguments at the same time. 
@@ -8,7 +8,7 @@ arguments at the same time.
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'attrinit'
+gem 'nxt_init'
 ```
 
 And then execute:
@@ -23,7 +23,7 @@ Or install it yourself as:
 
 ```ruby
 class MyService
-    include Attrinit
+    include NxtInit
     attr_init :one, 
              two: 'has a default', 
              three: nil, # makes the attribute optional
@@ -63,7 +63,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/nxt-insurance/attrinit.
+Bug reports and pull requests are welcome on GitHub at https://github.com/nxt-insurance/nxt_init.
 
 ## License
 

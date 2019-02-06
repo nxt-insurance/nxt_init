@@ -1,15 +1,15 @@
 
 lib = File.expand_path("../lib", __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "attrinit/version"
+require "nxt_init/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "attrinit"
-  spec.version       = Attrinit::VERSION
+  spec.name          = "nxt_init"
+  spec.version       = NxtInit::VERSION
   spec.authors       = ["Andreas Robecke"]
   spec.email         = ["a.robecke@getsafe.de"]
 
-  spec.summary       = %q{attrinit allows you to define an initializers that takes option arguments and defines private readers for those on the fly}
+  spec.summary       = %q{nxt_init allows you to define an initializers that takes option arguments and defines private readers for those on the fly}
   spec.homepage      = "https://github.com/nxt-insurance"
   spec.license       = "MIT"
 
@@ -19,7 +19,7 @@ Gem::Specification.new do |spec|
     spec.metadata["allowed_push_host"] = 'https://rubygems.org'
 
     spec.metadata["homepage_uri"] = spec.homepage
-    spec.metadata["source_code_uri"] = "https://github.com/nxt-insurance/attrinit"
+    spec.metadata["source_code_uri"] = "https://github.com/nxt-insurance/nxt_init"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."

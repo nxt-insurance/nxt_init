@@ -1,11 +1,11 @@
-RSpec.describe Attrinit do
+RSpec.describe NxtInit do
   it "has a version number" do
-    expect(Attrinit::VERSION).not_to be nil
+    expect(NxtInit::VERSION).not_to be nil
   end
 
   let(:test_class) do
     Class.new do
-      include Attrinit
+      include NxtInit
       attr_init :plain, with_default_value: 'default', with_default_block: -> { default_block }
 
       private
@@ -16,11 +16,11 @@ RSpec.describe Attrinit do
     end
   end
 
-  describe 'attr_init' do
+  describe '.attr_init' do
     context 'when called multiple times' do
       let(:test_class) do
         Class.new do
-          include Attrinit
+          include NxtInit
           attr_init :plain, with_default_value: 'default', with_default_block: -> { default_block }
           attr_init :plain, with_default_value: 'new default', with_default_block: -> { 'other default block' }
           attr_init :additional
@@ -76,7 +76,7 @@ RSpec.describe Attrinit do
 
         let(:test_class) do
           Class.new(parent_class) do
-            include Attrinit
+            include NxtInit
             attr_init :plain,
                              with_default_value: 'default',
                              with_default_block: -> { 'default block' }

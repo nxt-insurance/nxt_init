@@ -1,7 +1,7 @@
-require "attrinit/version"
+require "nxt_init/version"
 require 'active_support'
 
-module Attrinit
+module NxtInit
   InvalidOptionError = Class.new(ArgumentError)
 
   module ClassMethods

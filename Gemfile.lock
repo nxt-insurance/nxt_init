@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    attrinit (0.1.0)
+    nxt_init (0.1.1)
       activesupport
 
 GEM
@@ -44,8 +44,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  attrinit!
   bundler (~> 1.17)
+  nxt_init!
   pry
   rake (~> 10.0)
   rspec (~> 3.0)
