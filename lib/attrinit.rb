@@ -42,8 +42,8 @@ module Attrinit
       attr_init_opts = attrs.slice(*option_keys)
       other_options = attrs.slice!(*option_keys)
       # passing **{} is like calling super({}) which does not work when super does not except arguments
-      other_options.empty? ? super(*args) : super(*args, **other_options)
       initialize_attrs_from_options(**attr_init_opts)
+      other_options.empty? ? super(*args) : super(*args, **other_options)
     end
 
     private
