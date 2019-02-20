@@ -47,7 +47,7 @@ RSpec.describe NxtInit do
   describe '.new' do
     context 'when a required parameter is missing' do
       it 'raises an error' do
-        expect { test_class.new }.to raise_error(KeyError)
+        expect { test_class.new }.to raise_error(KeyError, 'NxtInit attr_init key :plain was missing at initialization!')
       end
     end
 

@@ -56,7 +56,7 @@ module NxtInit
           value = attrs[key] || (value.respond_to?(:call) ? instance_exec(&value) : value)
         elsif opt.is_a?(Symbol)
           key = opt
-          value = attrs.fetch(opt)
+          value = attrs.fetch(opt) { |k| raise KeyError, "NxtInit attr_init key :#{k} was missing at initialization!"}
         else
           raise InvalidOptionError, "Don't know how to deal with #{opt}"
         end
