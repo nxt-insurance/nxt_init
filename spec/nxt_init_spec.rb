@@ -1,3 +1,5 @@
+require 'date'
+
 RSpec.describe NxtInit do
   it "has a version number" do
     expect(NxtInit::VERSION).not_to be nil
@@ -6,7 +8,9 @@ RSpec.describe NxtInit do
   let(:test_class) do
     Class.new do
       include NxtInit
-      attr_init :plain, with_default_value: 'default', with_default_block: -> { default_block }
+      attr_init :plain,
+                with_default_value: 'default',
+                with_default_block: -> { default_block }
 
       private
 
@@ -55,9 +59,39 @@ RSpec.describe NxtInit do
       subject { test_class.new(plain: 'plain') }
 
       it 'initializes the parameters with the correct values' do
-        expect(subject.send :plain).to eq('plain')
-        expect(subject.send :with_default_value).to eq('default')
-        expect(subject.send :with_default_block).to eq('default block')
+        expect(subject.send(:plain)).to eq('plain')
+        expect(subject.send(:with_default_value)).to eq('default')
+        expect(subject.send(:with_default_block)).to eq('default block')
+        expect(subject.send(:with_default_block)).to eq('default block')
+      end
+    end
+
+    context 'preprocessing block' do
+      let(:preprocessor) do
+        Class.new do
+          include NxtInit
+          attr_init name: -> (attr) { attr.capitalize }
+        end
+      end
+
+      context 'when an parameter was given' do
+        subject { preprocessor.new(name: 'andy') }
+
+        it 'calls the block with the param' do
+          expect(subject.send(:name)).to eq('Andy')
+        end
+      end
+
+      context 'when no parameter was given' do
+        it 'passes nil to the block' do
+          expect { preprocessor.new }.to raise_error(KeyError, /NxtInit attr_init key :name was missing at initialization!/)
+        end
+      end
+
+      context 'when the parameter was nil' do
+        it 'passes nil to the block' do
+          expect { preprocessor.new(name: nil) }.to raise_error(NoMethodError, /undefined method `capitalize' for nil:NilClass/)
+        end
       end
     end
 

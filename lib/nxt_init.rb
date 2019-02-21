@@ -52,11 +52,18 @@ module NxtInit
       self.class.send(:attr_init_opts).each do |opt|
         if opt.is_a?(Hash)
           key = opt.keys.first
-          value = opt.values.first
-          value = attrs[key] || (value.respond_to?(:call) ? instance_exec(&value) : value)
+          default_value = opt.values.first
+          given_value = attrs[key]
+          key_missing = !attrs.key?(key)
+
+          if default_value_is_preprocessor?(default_value)
+            value = key_missing ? raise_key_error(key) : instance_exec(given_value, &default_value)
+          else
+            value = given_value || (default_value.respond_to?(:call) ? instance_exec(&default_value) : default_value)
+          end
         elsif opt.is_a?(Symbol)
           key = opt
-          value = attrs.fetch(opt) { |k| raise KeyError, "NxtInit attr_init key :#{k} was missing at initialization!"}
+          value = attrs.fetch(opt) { |k| raise_key_error(k) }
         else
           raise InvalidOptionError, "Don't know how to deal with #{opt}"
         end
@@ -64,6 +71,17 @@ module NxtInit
       end
     end
 
+    def default_value_is_block?(default_value)
+      default_value.respond_to?(:call)
+    end
+
+    def default_value_is_preprocessor?(default_value)
+      default_value_is_block?(default_value) && default_value.arity == 1
+    end
+
+    def raise_key_error(key)
+      raise KeyError, "NxtInit attr_init key :#{key} was missing at initialization!"
+    end
   end
 
   def self.included(base)
