@@ -27,19 +27,21 @@ class MyService
     attr_init :one, 
              two: 'has a default', 
              three: nil, # makes the attribute optional
-             four: -> { "This is set on initialize: #{Time.now} - means it will not be evaluated multiple times" } 
+             four: -> { "This is set on initialize: #{Time.now} - means it will not be evaluated multiple times" },
+             five: -> (string) { string.upcase }
              
     def call
       {
         one: one,
         two: two,
         three: three,
-        four: four
+        four: four,
+        five: five
       }
     end
 end
 
-my_service = MyService.new(one: 'this is required')
+my_service = MyService.new(one: 'this is required', five: 'rapha and nils')
 my_service.call
 
 # Will output the following:
@@ -48,7 +50,8 @@ my_service.call
   one: "this is required", 
   two: "has a default", 
   three: nil, 
-  four: "This is evaluated on initialize: 2019-02-04 18:10:56 +0100 - means it will not be evaluated multiple times"
+  four: "This is evaluated on initialize: 2019-02-04 18:10:56 +0100 - means it will not be evaluated multiple times",
+  five: 'RAPHA AND NILS'
 } 
 ```
 
