@@ -62,7 +62,6 @@ RSpec.describe NxtInit do
         expect(subject.send(:plain)).to eq('plain')
         expect(subject.send(:with_default_value)).to eq('default')
         expect(subject.send(:with_default_block)).to eq('default block')
-        expect(subject.send(:with_default_block)).to eq('default block')
       end
     end
 
