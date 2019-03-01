@@ -21,42 +21,63 @@ Or install it yourself as:
 
 ## Usage
 
+NxtInit removes some boilerplate. Instead of writing your initializer and (private) attribute readers each and every time like so:
+
 ```ruby
-class MyService
-    include NxtInit
-    attr_init :one, 
-             two: 'has a default', 
-             three: nil, # makes the attribute optional
-             four: -> { "This is set on initialize: #{Time.now} - means it will not be evaluated multiple times" },
-             five: -> (string) { string.upcase }
-             
-    def call
-      {
-        one: one,
-        two: two,
-        three: three,
-        four: four,
-        five: five
-      }
-    end
+class GetSafe
+  def initialize(frontend:, backend:)
+    @frontend = frontend
+    @backend = backend
+  end
+  
+  private 
+  
+  attr_reader :frontend, :backend
 end
-
-my_service = MyService.new(one: 'this is required', five: 'rapha and nils')
-my_service.call
-
-# Will output the following:
-{
-
-  one: "this is required", 
-  two: "has a default", 
-  three: nil, 
-  four: "This is evaluated on initialize: 2019-02-04 18:10:56 +0100 - means it will not be evaluated multiple times",
-  five: 'RAPHA AND NILS'
-} 
 ```
 
-The attribute readers are private. If you need public accessors you have to add them yourself. That's all there is.
-Check out the specs for examples how we handle inheritance. 
+You can instead do the following:
+
+```ruby
+class GetSafe
+  include NxtInit
+  attr_init :frontend, :backend
+end
+```
+
+### Optional arguments and defaults
+
+In order to provide default values you can simply use the hash syntax to define your defaults. 
+If you want to make an attribute optional, just pass nil as the default argument. 
+If there is no default value and you did not provide one when initializing your class, you will get a KeyError.
+
+```ruby
+class GetSafe
+  include NxtInit
+  attr_init frontend: 'React', 
+            backend: -> { 'Ruby on Rails' }, 
+            middleware: nil
+end
+```
+
+### Preprocessors
+
+If you want to preprocess your attribute somehow, you can define a preprocessor block to which the original attribute will be yielded.
+Note that you can also call methods in your block if you have some heavier lifting to do.
+
+```ruby
+class GetSafe
+  include NxtInit
+  attr_init date: -> (date) { date && date.is_a?(Date) ? date : Date.parse(date) }
+end
+```
+
+Also you can still pass in nil if your block can handle it. If the attribute is not provided on initialization again a KeyError will be raised. 
+
+### Inheritance
+
+When you inherit from a class that already includes NxtInit you can add further attributes to your subclass and overwrite existing options
+simply by using attr_init for the same attributes. Check out the specs for more examples.
 
 ## Development
 
