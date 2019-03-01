@@ -43,6 +43,9 @@ class GetSafe
   include NxtInit
   attr_init :frontend, :backend
 end
+
+GetSafe.new # KeyError (NxtInit attr_init key :frontend was missing at initialization!
+GetSafe.new(frontend: 'React', backend: 'Ruby on Rails') #<GetSafe:0x00007f81fb8506b8 @frontend="React", @backend="Ruby on Rails">
 ```
 
 ### Optional arguments and defaults
@@ -58,6 +61,8 @@ class GetSafe
             backend: -> { 'Ruby on Rails' }, 
             middleware: nil
 end
+
+GetSafe.new #<GetSafe:0x00007fab608e1918 @frontend="React", @backend="Ruby on Rails", @middleware=nil>
 ```
 
 ### Preprocessors
@@ -68,8 +73,12 @@ Note that you can also call methods in your block if you have some heavier lifti
 ```ruby
 class GetSafe
   include NxtInit
-  attr_init date: -> (date) { date && date.is_a?(Date) ? date : Date.parse(date) }
+  attr_init date: -> (date) { date && (date.is_a?(Date) ? date : Date.parse(date)) }
 end
+
+GetSafe.new(date: '2020/12/12').send(:date) # will give you the date
+GetSafe.new(date: nil).send(:date) # would give you nil
+GetSafe.new # would raise KeyError (NxtInit attr_init key :date was missing at initialization!)
 ```
 
 Also you can still pass in nil if your block can handle it. If the attribute is not provided on initialization again a KeyError will be raised. 
