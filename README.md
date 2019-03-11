@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/nxt-insurance/nxt_init.svg?style=svg)](https://circleci.com/gh/nxt-insurance/nxt_init)
+
 # NxtInit
 
 Create an initializer that accepts option arguments and define private readers for your 
