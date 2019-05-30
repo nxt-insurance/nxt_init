@@ -49,6 +49,50 @@ RSpec.describe NxtInit do
   end
 
   describe '.new' do
+    context 'when the given value was nil' do
+      let(:test_class) do
+        Class.new do
+          include NxtInit
+          attr_init with_default_value: 'default', with_default_block: -> { default_block }
+
+          private
+
+          def default_block
+            'default block'
+          end
+        end
+      end
+
+      subject { test_class.new(with_default_value: nil, with_default_block: nil) }
+
+      it 'returns the correct default values' do
+        expect(subject.send(:with_default_value)).to eq('default')
+        expect(subject.send(:with_default_block)).to eq('default block')
+      end
+    end
+
+    context 'when the given value was false' do
+      let(:test_class) do
+        Class.new do
+          include NxtInit
+          attr_init with_default_value: 'default', with_default_block: -> { default_block }
+
+          private
+
+          def default_block
+            'default block'
+          end
+        end
+      end
+
+      subject { test_class.new(with_default_value: false, with_default_block: false) }
+
+      it 'returns the correct default values' do
+        expect(subject.send(:with_default_value)).to eq(false)
+        expect(subject.send(:with_default_block)).to eq(false)
+      end
+    end
+
     context 'when a required parameter is missing' do
       it 'raises an error' do
         expect { test_class.new }.to raise_error(KeyError, 'NxtInit attr_init key :plain was missing at initialization!')

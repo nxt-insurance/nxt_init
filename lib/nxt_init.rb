@@ -59,7 +59,7 @@ module NxtInit
           if default_value_is_preprocessor?(default_value)
             value = key_missing ? raise_key_error(key) : instance_exec(given_value, &default_value)
           else
-            value = given_value || (default_value.respond_to?(:call) ? instance_exec(&default_value) : default_value)
+            value = given_value.nil? ? (default_value.respond_to?(:call) ? instance_exec(&default_value) : default_value) : given_value
           end
         elsif opt.is_a?(Symbol)
           key = opt
