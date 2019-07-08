@@ -202,7 +202,8 @@ RSpec.describe NxtInit do
           end
 
           it 'overwrites the parents option' do
-            subject
+            expect { subject }.to_not raise_error
+            expect(subject.send(:plain)).to eq('This is my default')
           end
         end
       end

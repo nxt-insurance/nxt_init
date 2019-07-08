@@ -9,17 +9,17 @@ module NxtInit
 
     attr_reader :key, :default_value
 
-    def resolve(attrs)
+    def resolve(attrs, target:)
       if default_value_was_given?
         key_missing = !attrs.key?(key)
         given_value = attrs[key]
 
         if default_value_is_preprocessor?
-          key_missing ? raise_key_error : instance_exec(given_value, &default_value)
+          key_missing ? raise_key_error : target.instance_exec(given_value, &default_value)
         else
           # only when the given value was nil we will evaluate the fallback --> false is a valid value
           if given_value.nil?
-            default_value_is_block? ? instance_exec(&default_value) : default_value
+            default_value_is_block? ? target.instance_exec(&default_value) : default_value
           else
             given_value
           end

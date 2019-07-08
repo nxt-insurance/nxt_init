@@ -50,7 +50,7 @@ module NxtInit
 
     def initialize_attrs_from_options(**attrs)
       self.class.send(:attr_init_opts).each do |_, opt|
-        value = opt.resolve(attrs)
+        value = opt.resolve(attrs, target: self)
         instance_variable_set("@#{opt.key}", value)
       end
     end
