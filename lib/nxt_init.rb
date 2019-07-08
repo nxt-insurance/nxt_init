@@ -1,17 +1,17 @@
 require "nxt_init/version"
 require "nxt_init/option"
-require 'active_support'
+require "nxt_init/not_provided_option"
+require 'active_support/all'
 
 module NxtInit
-  InvalidOptionError = Class.new(ArgumentError)
-
   module ClassMethods
     def attr_init(*args)
-      options = build_options(*args)
-      self.attr_init_opts ||= []
-      self.attr_init_opts = merge_options(attr_init_opts, options)
+      options_map = build_options_map(*args)
 
-      define_private_readers(*options.map(&:key))
+      self.attr_init_opts ||= {}
+      self.attr_init_opts.merge!(options_map)
+
+      define_private_readers(*options_map.keys)
     end
 
     attr_accessor :attr_init_opts
@@ -19,15 +19,7 @@ module NxtInit
     private
 
     def inherited(subclass)
-      subclass.attr_init_opts = attr_init_opts.map(&:dup)
-    end
-
-    def merge_options(existing_options, new_options)
-      all_option_keys = (existing_options + new_options).map(&:key)
-
-      all_option_keys.uniq.each_with_object([]) do |key, merged_options|
-        merged_options << new_options.find { |opt| opt.key == key } || existing_options.find { |opt| opt.key == key }
-      end
+      subclass.attr_init_opts = attr_init_opts.deep_dup
     end
 
     def define_private_readers(*keys)
@@ -35,17 +27,17 @@ module NxtInit
       private *keys
     end
 
-    def build_options(*args)
+    def build_options_map(*args)
       options_hash = *args.extract_options!
-      args = args.map { |arg| Option.new(arg) }
-      options_hash.each { |key, value| args << Option.new(key, default_value: value) }
-      args
+      options_from_args = args.each_with_object({}) { |key, acc| acc[key] = Option.new(key) }
+      options_from_options = options_hash.each_with_object({}) { |(key, value), acc| acc[key] = Option.new(key, default_value: value) }
+      options_from_args.merge(options_from_options)
     end
   end
 
   module InstanceMethods
     def initialize(*args, **attrs)
-      option_keys = self.class.send(:attr_init_opts).map(&:key)
+      option_keys = self.class.send(:attr_init_opts).keys
 
       attr_init_opts = attrs.slice(*option_keys)
       other_options = attrs.slice!(*option_keys)
@@ -57,33 +49,10 @@ module NxtInit
     private
 
     def initialize_attrs_from_options(**attrs)
-      self.class.send(:attr_init_opts).each do |opt|
-        if opt.default_value_was_given?
-          default_value = opt.default_value
-          given_value = attrs[opt.key]
-          key_missing = !attrs.key?(opt.key)
-
-          if opt.default_value_is_preprocessor?
-            value = key_missing ? raise_key_error(opt.key) : instance_exec(given_value, &default_value)
-          else
-            # only when the given value was nil we will evaluate the fallback --> false is a valid value
-            value = if given_value.nil?
-              opt.default_value_is_block? ? instance_exec(&default_value) : default_value
-            else
-              given_value
-            end
-          end
-        elsif opt.requires_value?
-          value = attrs.fetch(opt.key) { |k| raise_key_error(k) }
-        else
-          raise InvalidOptionError, "Don't know how to deal with #{opt}"
-        end
+      self.class.send(:attr_init_opts).each do |_, opt|
+        value = opt.resolve(attrs)
         instance_variable_set("@#{opt.key}", value)
       end
-    end
-
-    def raise_key_error(key)
-      raise KeyError, "NxtInit attr_init key :#{key} was missing at initialization!"
     end
   end
 
