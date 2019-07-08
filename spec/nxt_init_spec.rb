@@ -189,6 +189,22 @@ RSpec.describe NxtInit do
         it 'does not influence the attr_init_opts of the parent class' do
           expect { attr_init_inherited }.not_to change { test_class.attr_init_opts}
         end
+
+        context 'when overwriting an option of the parent class' do
+          let(:overwriting_subclass) do
+            Class.new(test_class) do
+              attr_init plain: 'This is my default'
+            end
+          end
+
+          subject do
+            overwriting_subclass.new
+          end
+
+          it 'overwrites the parents option' do
+            subject
+          end
+        end
       end
     end
   end
