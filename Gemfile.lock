@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    nxt_init (0.1.4)
+    nxt_init (0.1.5)
       activesupport
 
 GEM
