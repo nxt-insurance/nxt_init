@@ -1,6 +1,6 @@
 require "nxt_init/version"
 require "nxt_init/option"
-require "nxt_init/missing_required_value"
+require "nxt_init/value_required"
 require 'active_support/all'
 
 module NxtInit

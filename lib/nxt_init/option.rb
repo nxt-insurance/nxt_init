@@ -2,7 +2,7 @@ module NxtInit
   class Option
     InvalidOptionError = Class.new(ArgumentError)
 
-    def initialize(key, default_value: MissingRequiredValue.new)
+    def initialize(key, default_value: ValueRequired.new)
       @key = key
       @default_value = default_value
     end
@@ -44,7 +44,7 @@ module NxtInit
     end
 
     def default_value_was_given?
-      !default_value.is_a?(MissingRequiredValue)
+      !default_value.is_a?(ValueRequired)
     end
 
     private
