@@ -67,6 +67,22 @@ end
 GetSafe.new #<GetSafe:0x00007fab608e1918 @frontend="React", @backend="Ruby on Rails", @middleware=nil>
 ```
 
+### BEWARE of Global Defaults
+
+```ruby
+class GetSafe
+  include NxtInit
+  attr_init frontend: [], # this is global and shared between all classes
+            backend: -> { [] } # this is local to an instance of the class
+end
+
+GetSafe.new.send(:frontend).object_id => 70236117045360
+GetSafe.new.send(:frontend).object_id => 70236117045360
+
+GetSafe.new.send(:backend).object_id => 70236143937240
+GetSafe.new.send(:backend).object_id => 70236121600680
+```
+
 ### Preprocessors
 
 If you want to preprocess your attribute somehow, you can define a preprocessor block to which the original attribute will be yielded.
