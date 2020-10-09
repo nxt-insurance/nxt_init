@@ -14,6 +14,14 @@ module NxtInit
       define_private_readers(*options_map.keys)
     end
 
+    def class_interface(*methods)
+      methods.each do |name|
+        define_singleton_method name do |*args, **opts, &block|
+          new(*args, **opts, &block).send(name)
+        end
+      end
+    end
+
     attr_accessor :attr_init_opts
 
     private

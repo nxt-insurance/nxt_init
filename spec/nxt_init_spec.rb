@@ -12,6 +12,12 @@ RSpec.describe NxtInit do
                 with_default_value: 'default',
                 with_default_block: -> { default_block }
 
+      class_interface :call
+
+      def call
+        default_block
+      end
+
       private
 
       def default_block
@@ -45,6 +51,14 @@ RSpec.describe NxtInit do
         expect(subject.send :with_default_value).to eq('new default')
         expect(subject.send :with_default_block).to eq('other default block')
       end
+    end
+  end
+
+  describe '.class_interface' do
+    subject { test_class }
+
+    it 'can be called directly on the class' do
+      expect(test_class.call(plain: 'old ruby')).to eq('default block')
     end
   end
 
