@@ -20,7 +20,7 @@ GEM
       concurrent-ruby (~> 1.0)
     method_source (1.0.0)
     minitest (5.14.3)
-    pry (0.13.1)
+    pry (0.14)
       coderay (~> 1.1)
       method_source (~> 1.0)
     rake (13.0.3)
