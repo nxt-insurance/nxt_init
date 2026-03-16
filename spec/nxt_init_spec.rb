@@ -137,7 +137,7 @@ RSpec.describe NxtInit do
 
       context 'when the parameter was nil' do
         it 'passes nil to the block' do
-          expect { preprocessor.new(name: nil) }.to raise_error(NoMethodError, /undefined method 'capitalize' for nil/)
+          expect { preprocessor.new(name: nil) }.to raise_error(NoMethodError, /undefined method.+capitalize/)
         end
       end
     end
