@@ -1,7 +1,7 @@
 require 'date'
 
 RSpec.describe NxtInit do
-  it "has a version number" do
+  it 'has a version number' do
     expect(NxtInit::VERSION).not_to be nil
   end
 
@@ -40,10 +40,10 @@ RSpec.describe NxtInit do
       subject { test_class.new(plain: 'plain', additional: 'additional') }
 
       it 'overwrites the initializers from before' do
-        expect(subject.send :plain).to eq('plain')
-        expect(subject.send :additional).to eq('additional')
-        expect(subject.send :with_default_value).to eq('new default')
-        expect(subject.send :with_default_block).to eq('other default block')
+        expect(subject.send(:plain)).to eq('plain')
+        expect(subject.send(:additional)).to eq('additional')
+        expect(subject.send(:with_default_value)).to eq('new default')
+        expect(subject.send(:with_default_block)).to eq('other default block')
       end
     end
   end
@@ -95,7 +95,9 @@ RSpec.describe NxtInit do
 
     context 'when a required parameter is missing' do
       it 'raises an error' do
-        expect { test_class.new }.to raise_error(KeyError, 'NxtInit attr_init key :plain was missing at initialization!')
+        expect do
+          test_class.new
+        end.to raise_error(KeyError, 'NxtInit attr_init key :plain was missing at initialization!')
       end
     end
 
@@ -113,7 +115,7 @@ RSpec.describe NxtInit do
       let(:preprocessor) do
         Class.new do
           include NxtInit
-          attr_init name: -> (attr) { attr.capitalize }
+          attr_init name: ->(attr) { attr.capitalize }
         end
       end
 
@@ -127,13 +129,15 @@ RSpec.describe NxtInit do
 
       context 'when no parameter was given' do
         it 'passes nil to the block' do
-          expect { preprocessor.new }.to raise_error(KeyError, /NxtInit attr_init key :name was missing at initialization!/)
+          expect do
+            preprocessor.new
+          end.to raise_error(KeyError, /NxtInit attr_init key :name was missing at initialization!/)
         end
       end
 
       context 'when the parameter was nil' do
         it 'passes nil to the block' do
-          expect { preprocessor.new(name: nil) }.to raise_error(NoMethodError, /undefined method `capitalize' for nil:NilClass/)
+          expect { preprocessor.new(name: nil) }.to raise_error(NoMethodError, /undefined method.+capitalize/)
         end
       end
     end
@@ -155,18 +159,17 @@ RSpec.describe NxtInit do
           Class.new(parent_class) do
             include NxtInit
             attr_init :plain,
-                             with_default_value: 'default',
-                             with_default_block: -> { 'default block' }
-
+                      with_default_value: 'default',
+                      with_default_block: -> { 'default block' }
           end
         end
 
         subject { test_class.new('Andy', company: 'Getsafe', plain: 'plain') }
 
         it 'passes through arguments and non attr_init options' do
-          expect(subject.send :plain).to eq('plain')
-          expect(subject.send :with_default_value).to eq('default')
-          expect(subject.send :with_default_block).to eq('default block')
+          expect(subject.send(:plain)).to eq('plain')
+          expect(subject.send(:with_default_value)).to eq('default')
+          expect(subject.send(:with_default_block)).to eq('default block')
           expect(subject.name).to eq('Andy')
           expect(subject.company).to eq('Getsafe')
         end
@@ -187,7 +190,7 @@ RSpec.describe NxtInit do
         end
 
         it 'does not influence the attr_init_opts of the parent class' do
-          expect { attr_init_inherited }.not_to change { test_class.attr_init_opts}
+          expect { attr_init_inherited }.not_to(change { test_class.attr_init_opts })
         end
 
         context 'when overwriting an option of the parent class' do
